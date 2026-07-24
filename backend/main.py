@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+import bcrypt
 import requests
 from datetime import date
 from fastapi.middleware.cors import CORSMiddleware
@@ -13,10 +14,7 @@ def get_db_connection():
     conn = psycopg2.connect(DATABASE_URL)
     return conn
 
-
-
 app = FastAPI()
-
 
 app.add_middleware(
     CORSMiddleware,
@@ -24,6 +22,7 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
 @app.get("/")
 def home(): 
     return {"message": "Calvin Eats is alive!"}
@@ -33,9 +32,7 @@ def get_menu():
     url = "https://apiservicelocatorstenantcds.fdmealplanner.com/api/v1/data-locator-webapi/7/meals?menuId=0&accountId=10013&locationId=10137&mealPeriodId=2&tenantId=7&monthId=7&startDate=2026%2F07%2F01&endDate=2026%2F07%2F31&timeOffset=300"
     response = requests.get(url)
     data = response.json()
-
     today = date.today().isoformat()
-    
     clean_meals = []
     for day in data["result"]:
         if day["menuForDate"][:10] == today:
@@ -45,7 +42,6 @@ def get_menu():
                 "meal_period": day["mealPeriodId"]
             })
     return clean_meals
-
 
 @app.post("/api/ratings")
 def add_rating(meal_name: str, rating: int, comment: str = ""):
@@ -58,7 +54,6 @@ def add_rating(meal_name: str, rating: int, comment: str = ""):
     conn.commit()
     conn.close()
     return {"message": "Rating saved!"}
-   
 
 @app.get("/api/ratings/{meal_name}")
 def get_ratings(meal_name: str):
@@ -71,3 +66,20 @@ def get_ratings(meal_name: str):
     rows = cursor.fetchall()
     conn.close()
     return [{"rating": row[0], "comment": row[1]} for row in rows]
+
+@app.post("/api/signup")
+def signup(email: str, password: str):
+    hashed_password = bcrypt.hashpw(password[:72].encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    try:
+        cursor.execute(
+            "INSERT INTO users (email, password) VALUES (%s, %s)",
+            (email, hashed_password)
+        )
+        conn.commit()
+        conn.close()
+        return {"message": "Account created!"}
+    except Exception as e:
+        conn.close()
+        return {"error": "Email already exists"}
