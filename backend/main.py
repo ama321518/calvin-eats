@@ -6,8 +6,11 @@ from fastapi.middleware.cors import CORSMiddleware
 import psycopg2 
 from dotenv import load_dotenv
 import os
-
+from jose import jwt
+from datetime import datetime, timedelta
 load_dotenv()
+
+SECRET_KEY = "calvineats-secret-key-2026"
 DATABASE_URL = os.getenv("DATABASE_URL")
 
 def get_db_connection():
@@ -83,3 +86,23 @@ def signup(email: str, password: str):
     except Exception as e:
         conn.close()
         return {"error": "Email already exists"}
+
+@app.post("/api/login")
+def login(email: str, password: str):
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    cursor.execute("SELECT password FROM users WHERE email = %s", (email,))
+    user = cursor.fetchone()
+    conn.close()
+    
+    if not user:
+        return {"error": "Email not found"}
+    
+    if not bcrypt.checkpw(password[:72].encode('utf-8'), user[0].encode('utf-8')):
+        return {"error": "Wrong password"}
+    
+    token = jwt.encode(
+        {"email": email, "exp": datetime.utcnow() + timedelta(hours=24)},
+        SECRET_KEY
+    )
+    return {"token": token}
