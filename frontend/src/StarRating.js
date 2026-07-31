@@ -19,7 +19,10 @@ function StarRating({ mealName }) {
   const submitRating = (star) => {
     setRating(star);
     fetch(`http://127.0.0.1:8000/api/ratings?meal_name=${encodeURIComponent(mealName)}&rating=${star}&comment=`, {
-      method: 'POST'
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${localStorage.getItem('token')}`
+      }
     })
     .then(res => res.json())
     .then(() => {

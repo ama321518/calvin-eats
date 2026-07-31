@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+from fastapi import FastAPI, Header, HTTPException, Depends
 import bcrypt
 import requests
 from datetime import date
@@ -11,6 +12,17 @@ from datetime import datetime, timedelta
 load_dotenv()
 
 SECRET_KEY = "calvineats-secret-key-2026"
+from fastapi import Header, HTTPException
+
+def verify_token(authorization: str = Header(None)):
+    if not authorization:
+        raise HTTPException(status_code=401, detail="Not logged in")
+    try:
+        token = authorization.split(" ")[1]
+        payload = jwt.decode(token, SECRET_KEY, algorithms=["HS256"])
+        return payload["email"]
+    except:
+        raise HTTPException(status_code=401, detail="Invalid token")
 DATABASE_URL = os.getenv("DATABASE_URL")
 
 def get_db_connection():
@@ -47,7 +59,7 @@ def get_menu():
     return clean_meals
 
 @app.post("/api/ratings")
-def add_rating(meal_name: str, rating: int, comment: str = ""):
+def add_rating(meal_name: str, rating: int, comment: str = "", email: str = Depends(verify_token)):
     conn = get_db_connection()
     cursor = conn.cursor()
     cursor.execute(
