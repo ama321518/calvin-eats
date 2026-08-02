@@ -18,7 +18,7 @@ function StarRating({ mealName }) {
 
   const submitRating = (star) => {
     setRating(star);
-    fetch(`http://127.0.0.1:8000/api/ratings?meal_name=${encodeURIComponent(mealName)}&rating=${star}&comment=`, {
+    fetch(`https://calvin-eats-backend.onrender.com/api/ratings?meal_name=${encodeURIComponent(mealName)}&rating=${star}&comment=`, {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${localStorage.getItem('token')}`
@@ -26,7 +26,7 @@ function StarRating({ mealName }) {
     })
     .then(res => res.json())
     .then(() => {
-      fetch(`http://127.0.0.1:8000/api/ratings/${encodeURIComponent(mealName)}`)
+    fetch(`https://calvin-eats-backend.onrender.com/api/ratings/${encodeURIComponent(mealName)}`)  
         .then(res => res.json())
         .then(data => {
           const avg = data.reduce((sum, r) => sum + r.rating, 0) / data.length;

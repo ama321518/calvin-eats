@@ -8,7 +8,7 @@ function Auth({ onLogin }) {
 
   const handleSubmit = () => {
     const endpoint = isLogin ? 'login' : 'signup';
-    fetch(`http://127.0.0.1:8000/api/${endpoint}?email=${email}&password=${password}`, {
+    fetch(`https://calvin-eats-backend.onrender.com/api/${endpoint}?email=${email}&password=${password}`, {
       method: 'POST'
     })
     .then(res => res.json())

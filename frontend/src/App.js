@@ -14,7 +14,7 @@ function App() {
   }, []);
 
   useEffect(() => {
-    fetch('http://127.0.0.1:8000/api/menu')
+    fetch('https://calvin-eats-backend.onrender.com/api/menu')
       .then(res => res.json())
       .then(data => setMeals(data));
   }, []);
