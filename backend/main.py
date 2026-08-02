@@ -44,7 +44,7 @@ def home():
 
 @app.get("/api/menu")
 def get_menu():
-    url = "https://apiservicelocatorstenantcds.fdmealplanner.com/api/v1/data-locator-webapi/7/meals?menuId=0&accountId=10013&locationId=10137&mealPeriodId=2&tenantId=7&monthId=7&startDate=2026%2F07%2F01&endDate=2026%2F07%2F31&timeOffset=300"
+    url = "https://apiservicelocatorstenantcds.fdmealplanner.com/api/v1/data-locator-webapi/7/meals?menuId=0&accountId=10013&locationId=10137&mealPeriodId=2&tenantId=7&monthId=8&startDate=2026%2F08%2F01&endDate=2026%2F08%2F31&timeOffset=300"
     response = requests.get(url)
     data = response.json()
     today = date.today().isoformat()
