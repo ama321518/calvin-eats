@@ -1,8 +1,21 @@
 import { render, screen } from '@testing-library/react';
-import App from './App';
+import Auth from './Auth';
+import StarRating from './StarRating';
 
-test('renders learn react link', () => {
-  render(<App />);
-  const linkElement = screen.getByText(/learn react/i);
-  expect(linkElement).toBeInTheDocument();
+test('login form shows email and password inputs', () => {
+  render(<Auth onLogin={() => {}} />);
+  expect(screen.getByPlaceholderText('Email')).toBeInTheDocument();
+  expect(screen.getByPlaceholderText('Password')).toBeInTheDocument();
+});
+
+test('login button is visible', () => {
+  render(<Auth onLogin={() => {}} />);
+  const buttons = screen.getAllByText('Login');
+  expect(buttons.length).toBeGreaterThan(0);
+});
+
+test('star rating renders 5 stars', () => {
+  render(<StarRating mealName="Grilled Chicken" />);
+  const stars = screen.getAllByText('★');
+  expect(stars).toHaveLength(5);
 });
