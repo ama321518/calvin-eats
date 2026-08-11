@@ -25,32 +25,31 @@ function Auth({ onLogin }) {
   };
 
   return (
-    <div style={{ padding: '20px', maxWidth: '400px', margin: '0 auto' }}>
-      <h2 style={{ color: '#6B0000' }}>{isLogin ? 'Login' : 'Sign Up'}</h2>
-      <input
-        type="email"
-        placeholder="Email"
-        value={email}
-        onChange={e => setEmail(e.target.value)}
-        style={{ display: 'block', width: '100%', padding: '8px', marginBottom: '10px' }}
-      />
-      <input
-        type="password"
-        placeholder="Password"
-        value={password}
-        onChange={e => setPassword(e.target.value)}
-        style={{ display: 'block', width: '100%', padding: '8px', marginBottom: '10px' }}
-      />
-      <button
-        onClick={handleSubmit}
-        style={{ background: '#6B0000', color: 'white', padding: '10px 20px', border: 'none', cursor: 'pointer' }}
-      >
-        {isLogin ? 'Login' : 'Sign Up'}
-      </button>
-      <p onClick={() => setIsLogin(!isLogin)} style={{ color: '#6B0000', cursor: 'pointer', marginTop: '10px' }}>
-        {isLogin ? 'No account? Sign up' : 'Have an account? Login'}
-      </p>
-      {message && <p>{message}</p>}
+    <div className="auth-page">
+      <div className="auth-card">
+        <h2 className="auth-title">{isLogin ? 'Login' : 'Sign Up'}</h2>
+        <input
+          type="email"
+          placeholder="Email"
+          value={email}
+          onChange={e => setEmail(e.target.value)}
+          className="auth-input"
+        />
+        <input
+          type="password"
+          placeholder="Password"
+          value={password}
+          onChange={e => setPassword(e.target.value)}
+          className="auth-input"
+        />
+        <button onClick={handleSubmit} className="auth-button">
+          {isLogin ? 'Login' : 'Sign Up'}
+        </button>
+        <p onClick={() => setIsLogin(!isLogin)} className="auth-toggle">
+          {isLogin ? 'No account? Sign up' : 'Have an account? Login'}
+        </p>
+        {message && <p className="auth-message">{message}</p>}
+      </div>
     </div>
   );
 }

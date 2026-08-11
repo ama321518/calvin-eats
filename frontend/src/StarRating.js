@@ -6,7 +6,7 @@ function StarRating({ mealName }) {
   const [avgRating, setAvgRating] = useState(null);
 
   useEffect(() => {
-    fetch(`http://127.0.0.1:8000/api/ratings/${encodeURIComponent(mealName)}`)
+    fetch(`https://calvin-eats-backend.onrender.com/api/ratings/${encodeURIComponent(mealName)}`)
       .then(res => res.json())
       .then(data => {
         if (data.length > 0) {
@@ -26,7 +26,7 @@ function StarRating({ mealName }) {
     })
     .then(res => res.json())
     .then(() => {
-    fetch(`https://calvin-eats-backend.onrender.com/api/ratings/${encodeURIComponent(mealName)}`)  
+      fetch(`https://calvin-eats-backend.onrender.com/api/ratings/${encodeURIComponent(mealName)}`)
         .then(res => res.json())
         .then(data => {
           const avg = data.reduce((sum, r) => sum + r.rating, 0) / data.length;
@@ -37,7 +37,16 @@ function StarRating({ mealName }) {
 
   return (
     <div>
-      {avgRating && <p style={{color: '#6B0000'}}>⭐ Average: {avgRating}/5</p>}
+      {avgRating && (
+        <div className="rating-summary">
+          <span className="rating-number">Average {avgRating}</span>
+          <span className="rating-summary-stars">
+            {[1, 2, 3, 4, 5].map((star) => (
+              <span key={star} style={{ color: star <= Math.round(avgRating) ? '#F0B429' : '#ccc' }}>★</span>
+            ))}
+          </span>
+        </div>
+      )}
       {[1, 2, 3, 4, 5].map((star) => (
         <span
           key={star}

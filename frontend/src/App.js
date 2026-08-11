@@ -35,15 +35,19 @@ function App() {
   }
 
   return (
-    <div>
-      <h1>Calvin Eats 🍽️</h1>
-      <p>Welcome, {user}! <span onClick={handleLogout} style={{color: '#6B0000', cursor: 'pointer'}}>Logout</span></p>
+    <div className="menu-container">
+      <div className="header-bar">
+        <h1>Calvin Eats 🍽️</h1>
+        <span className="logout-link" onClick={handleLogout}>
+          {user} · Logout
+        </span>
+      </div>
       <p>Today's Menu</p>
       {meals.map((day, index) => (
-        <div key={index}>
-          {day.meals.split(", ").map((meal,mealIndex) => (
-            <div key={mealIndex}>
-              <p className="meal-card">{meal}</p>
+        <div className="menu-list" key={index}>
+          {day.meals.split(", ").map((meal, mealIndex) => (
+            <div className="meal-row" key={mealIndex}>
+              <span className="meal-name">{meal}</span>
               <StarRating mealName={meal} />
             </div>
           ))}
