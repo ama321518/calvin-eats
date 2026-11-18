@@ -35,7 +35,7 @@ app = FastAPI()
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000", "https://vocal-kataifi-de20c9.netlify.app"],
+    allow_origins=["http://localhost:3000", "https://calvin-eats.netlify.app", "https://vocal-kataifi-de20c9.netlify.app"],
     allow_methods=["*"],
     allow_headers=["*"],
 )
